@@ -1,7 +1,7 @@
 require "rubygems"
 require 'sequel'
 require "sqlite3"
-require_relative '../lib/humble.rb'
+require 'humble'
 
 class Movie
   attr_reader :name
