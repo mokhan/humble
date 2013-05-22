@@ -16,13 +16,32 @@ class MovieMapping
   end
 
   def find_all_using(connection, clazz)
-    connection[:movies].map do |row|
-      Movie.new(row)
-    end
+    Results.new(connection[:movies], MovieMapper.new)
   end
 
   def run(map)
     map.table :movies
+  end
+end
+
+class MovieMapper
+  def map_from(row)
+    Movie.new(row)
+  end
+end
+
+class Results
+  include Enumerable
+
+  def initialize(rows, mapper)
+    @rows = rows
+    @mapper = mapper
+  end
+
+  def each(&block)
+    @rows.each do |row|
+      block.call(@mapper.map_from(row))
+    end
   end
 end
 
