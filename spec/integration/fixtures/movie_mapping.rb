@@ -16,7 +16,9 @@ class MovieMapping
   end
 
   def find_all_using(connection, clazz)
-    connection[:movies]
+    connection[:movies].map do |row|
+      Movie.new(row)
+    end
   end
 
   def run(map)

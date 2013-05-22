@@ -31,11 +31,11 @@ describe "orm" do
       results.count.should == 1
     end
 
-    xit "should return each movie with its name" do
+    it "should return each movie with its name" do
       results.first.name.should == 'monsters inc'
     end
 
-    xit "should return instances of the target type" do
+    it "should return instances of the target type" do
       results.first.should be_instance_of(Movie)
     end
   end
