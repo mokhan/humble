@@ -90,7 +90,6 @@ class MovieMapping < DatabaseMapping
   end
 
   def save_using(connection, item)
-    p "SAVING"
     connection[:movies].insert(:name => item.name)
   end
 
