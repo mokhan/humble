@@ -8,7 +8,7 @@ module Humble
     end
 
     def add(mapping)
-      @mappings.push(mapping)
+      @mappings.push(prepare(mapping))
     end
 
     def build_session_factory
@@ -17,8 +17,15 @@ module Humble
 
     def mapping_for(item)
       @mappings.find do |mapping|
-        mapping.configuration.is_for?(item)
+        mapping.is_for?(item)
       end
+    end
+
+    private
+
+    def prepare(mapping, builder = MappingConfigurationBuilder.new)
+      mapping.run(builder)
+      builder.build
     end
   end
 end
