@@ -6,27 +6,12 @@ class Movie
   end
 end
 
-class MovieMapping
-  def is_for?(item)
-    item == Movie || item.is_a?(Movie)
-  end
-
-  def save_using(connection, item)
-    connection[:movies].insert(:name => item.name)
-  end
-
-  def find_all_using(connection, clazz)
-    Results.new(connection[:movies], MovieMapper.new)
-  end
-
+class MovieMapping < Humble::DatabaseMapping
   def run(map)
     map.table :movies
-  end
-end
-
-class MovieMapper
-  def map_from(row)
-    Movie.new(row)
+    map.type Movie
+    map.primary_key :id
+    map.column :name
   end
 end
 
