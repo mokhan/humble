@@ -16,7 +16,7 @@ module Humble
     end
 
     def find_all(clazz)
-      mapping_for(clazz).find_all_using(create_connection, clazz)
+      mapping_for(clazz).find_all_using(create_connection)
     end
 
     private
