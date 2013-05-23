@@ -56,6 +56,10 @@ module Humble
       connection[@table.name].insert(@table.insert(item))
     end
 
+    def is_for?(item)
+      item == @attributes[:type] || item.is_a?(@attributes[:type])
+    end
+
     def [](key)
       @attributes[key]
     end

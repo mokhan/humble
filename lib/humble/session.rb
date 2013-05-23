@@ -28,7 +28,7 @@ module Humble
     end
 
     def mapping_for(item)
-      mapper_registry.mapping_for(item)
+      mapper_registry.mapping_for(item).configuration
     end
   end
 end
