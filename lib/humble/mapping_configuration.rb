@@ -10,12 +10,7 @@ module Humble
     end
 
     def save_using(connection, item)
-      if @table.has_default_value?(item)
-        id = connection[@table.name].insert(@table.insert(item))
-        item.instance_variable_set('@id', id)
-      else
-        connection[@table.name].update(@table.update(item))
-      end
+      @table.persist(connection, item)
     end
 
     def is_for?(item)

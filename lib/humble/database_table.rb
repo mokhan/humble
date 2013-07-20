@@ -18,15 +18,12 @@ module Humble
       @columns << Column.new(:name => name)
     end
 
-    def insert(item)
-      prepare_statement do |column|
-        column.prepare_insert(item)
-      end
-    end
-
-    def update(item)
-      prepare_statement do |column|
-        column.prepare_update(item)
+    def persist(connection, item)
+      if has_default_value?(item)
+        id = connection[@name].insert(insert(item))
+        item.instance_variable_set('@id', id)
+      else
+        connection[@name].update(update(item))
       end
     end
 
@@ -45,5 +42,18 @@ module Humble
         result.merge(yield(column))
       end
     end
+
+    def insert(item)
+      prepare_statement do |column|
+        column.prepare_insert(item)
+      end
+    end
+
+    def update(item)
+      prepare_statement do |column|
+        column.prepare_update(item)
+      end
+    end
+
   end
 end
