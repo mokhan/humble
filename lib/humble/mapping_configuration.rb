@@ -9,12 +9,12 @@ module Humble
       ResultSet.new(connection[@table.name], mapper)
     end
 
-    def save_using(connection, item)
-      @table.persist(connection, item)
+    def save_using(connection, entity)
+      @table.persist(connection, entity)
     end
 
     def matches?(item)
-      item == self[:type] || item.is_a?(self[:type])
+      self[:type] == item || item.is_a?(self[:type])
     end
 
     def [](key)

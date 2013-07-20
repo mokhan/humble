@@ -15,7 +15,7 @@ module Humble
 
     def include?(item)
       self.find do |x|
-        x.id == item.id
+        x == item
       end
     end
 

@@ -11,8 +11,8 @@ module Humble
       end
     end
 
-    def save(item)
-      mapping_for(item).save_using(create_connection, item)
+    def save(entity)
+      mapping_for(entity).save_using(create_connection, entity)
     end
 
     def find_all(clazz)
@@ -27,8 +27,8 @@ module Humble
       @connection ||= connection_factory.create_connection
     end
 
-    def mapping_for(item)
-      mapper_registry.mapping_for(item)
+    def mapping_for(entity)
+      mapper_registry.mapping_for(entity)
     end
   end
 end

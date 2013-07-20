@@ -9,6 +9,13 @@ class Movie
   def name=(new_name)
     @name = new_name
   end
+
+  def ==(other)
+    return false unless other
+    return false if other.id == -1
+    return false if @id == -1
+    @id == other.id
+  end
 end
 
 class MovieMapping < Humble::DatabaseMapping
