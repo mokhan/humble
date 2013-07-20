@@ -10,6 +10,7 @@ module Humble
     end
 
     def save_using(connection, item)
+      p @attributes
       id = connection[@table.name].insert(@table.insert(item))
       item.instance_variable_set('@id', id)
     end

@@ -5,6 +5,10 @@ class Movie
     @id = attributes[:id] || -1
     @name = attributes[:name]
   end
+
+  def name=(new_name)
+    @name = new_name
+  end
 end
 
 class MovieMapping < Humble::DatabaseMapping

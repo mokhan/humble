@@ -1,12 +1,7 @@
-require "spec_helper"
-require_relative 'fixtures/movie_mapping.rb'
+require "integration_helper"
 
-describe "orm" do
-  let(:connection) { Sequel.connect(connection_string) }
-  let(:connection_string) { 'sqlite://test.db' }
-  let(:configuration) { Humble::Configuration.new(connection_string) }
-  let(:session_factory) { configuration.build_session_factory }
-  let(:session) { session_factory.create_session }
+describe "crud" do
+  include_context "orm"
 
   before :each do
     connection.create_table :movies do
@@ -73,5 +68,4 @@ describe "orm" do
       movie.id.should_not == -1
     end
   end
-
 end
