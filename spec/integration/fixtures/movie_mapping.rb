@@ -2,7 +2,7 @@ class Movie
   attr_reader :id, :name
 
   def initialize(attributes)
-    @id = attributes[:name] || -1
+    @id = attributes[:id] || -1
     @name = attributes[:name]
   end
 end

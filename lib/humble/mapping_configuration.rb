@@ -10,7 +10,8 @@ module Humble
     end
 
     def save_using(connection, item)
-      connection[@table.name].insert(@table.insert(item))
+      id = connection[@table.name].insert(@table.insert(item))
+      item.instance_variable_set('@id', id)
     end
 
     def is_for?(item)

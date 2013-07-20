@@ -42,9 +42,11 @@ describe "orm" do
   end
 
   context "when inserting a new record" do
+    let(:movie) { Movie.new(:name => 'oop') }
+
     before :each do
       session.begin_transaction do |session|
-        session.save(Movie.new(:name => 'oop'))
+        session.save(movie)
       end
     end
 
@@ -61,6 +63,11 @@ describe "orm" do
 
     it "should insert the name" do
       results.first[:name].should == 'oop'
+    end
+
+    it "should update the new item with the new id" do
+      p movie.id
+      movie.id.should_not == -1
     end
   end
 
