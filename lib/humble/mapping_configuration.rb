@@ -11,8 +11,13 @@ module Humble
 
     def save_using(connection, item)
       p @attributes
-      id = connection[@table.name].insert(@table.insert(item))
-      item.instance_variable_set('@id', id)
+      p @table
+      if item.id < 0
+        id = connection[@table.name].insert(@table.insert(item))
+        item.instance_variable_set('@id', id)
+      else
+        connection[@table.name].update(@table.insert(item))
+      end
     end
 
     def is_for?(item)
