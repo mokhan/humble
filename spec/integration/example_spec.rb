@@ -3,19 +3,6 @@ require "integration_helper"
 describe "crud" do
   include_context "orm"
 
-  before :each do
-    connection.create_table :movies do
-      primary_key :id
-      String :name
-    end
-
-    configuration.add(MovieMapping.new)
-  end
-
-  after :each do
-    connection.drop_table :movies
-  end
-
   context "when fetching all items" do
     before :each do
       @id = connection[:movies].insert(:name => 'monsters inc')
