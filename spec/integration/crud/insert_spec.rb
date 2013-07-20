@@ -1,6 +1,6 @@
 require "integration_helper"
 
-describe "crud" do
+describe "orm" do
   include_context "orm"
 
   context "when inserting a new record" do
