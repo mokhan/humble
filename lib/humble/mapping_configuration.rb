@@ -13,7 +13,7 @@ module Humble
       @table.persist(connection, item)
     end
 
-    def is_for?(item)
+    def matches?(item)
       item == self[:type] || item.is_a?(self[:type])
     end
 

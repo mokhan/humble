@@ -17,7 +17,7 @@ module Humble
 
     def mapping_for(item)
       @mappings.find do |mapping|
-        mapping.is_for?(item)
+        mapping.matches?(item)
       end
     end
 
