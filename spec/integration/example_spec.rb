@@ -23,7 +23,7 @@ describe "orm" do
 
   context "when fetching all items" do
     before :each do
-      connection[:movies].insert(:name => 'monsters inc')
+      @id = connection[:movies].insert(:name => 'monsters inc')
     end
 
     let(:results) { session.find_all Movie }
@@ -38,6 +38,10 @@ describe "orm" do
 
     it "should return instances of the target type" do
       results.first.should be_instance_of(Movie)
+    end
+
+    it "should include the saved movie" do
+      results.should include(Movie.new(:id => @id, :name => 'monsters inc'))
     end
   end
 
@@ -66,7 +70,6 @@ describe "orm" do
     end
 
     it "should update the new item with the new id" do
-      p movie.id
       movie.id.should_not == -1
     end
   end
