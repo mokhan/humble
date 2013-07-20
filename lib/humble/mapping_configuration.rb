@@ -10,7 +10,7 @@ module Humble
     end
 
     def save_using(connection, item)
-      if  @table.has_default_value?(item)
+      if @table.has_default_value?(item)
         id = connection[@table.name].insert(@table.insert(item))
         item.instance_variable_set('@id', id)
       else
@@ -19,7 +19,7 @@ module Humble
     end
 
     def is_for?(item)
-      item == @attributes[:type] || item.is_a?(@attributes[:type])
+      item == self[:type] || item.is_a?(self[:type])
     end
 
     def [](key)
@@ -29,8 +29,7 @@ module Humble
     private
 
     def mapper
-      @attributes[:mapper] || DefaultDataRowMapper.new(self)
+      self[:mapper] || DefaultDataRowMapper.new(self)
     end
   end
-
 end
