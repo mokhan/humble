@@ -11,15 +11,15 @@ module Humble
     end
 
     def primary_key(name, default: 0)
-      @columns << Column.new(:name => name, :default => default, :primary_key => true)
+      @primary_key = PrimaryKeyColumn.new(name, default)
     end
 
     def add_column(name)
-      @columns << Column.new(:name => name)
+      @columns << Column.new(name)
     end
 
     def persist(connection, item)
-      if has_default_value?(item)
+      if @primary_key.has_default_value?(item)
         insert(item, connection[@name])
       else
         update(item, connection[@name])
@@ -27,18 +27,10 @@ module Humble
     end
 
     def destroy(connection, entity)
-      primary_key_column.destroy(connection[@name], entity)
+      @primary_key.destroy(connection[@name], entity)
     end
 
     private
-
-    def has_default_value?(item)
-      primary_key_column.default == item.id
-    end
-
-    def primary_key_column
-      @columns.find { |x| x.primary_key? }
-    end
 
     def prepare_statement
       @columns.inject({}) do |result, column|
@@ -48,7 +40,7 @@ module Humble
 
     def insert(item, connection)
       id = connection.insert(prepare_statement { |column| column.prepare_insert(item) })
-      primary_key_column.apply(id, item)
+      @primary_key.apply(id, item)
     end
 
     def update(item, connection)

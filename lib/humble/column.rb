@@ -1,40 +1,51 @@
 module Humble
   class Column
-    def initialize(attributes)
-      @attributes = attributes
+    def initialize(name)
+      @column_name = name
     end
 
     def prepare_insert(item)
       return {} if primary_key?
-      key = column_name
-      value = item.instance_variable_get("@#{key}")
-      { key.to_sym => value }
+      value = item.instance_variable_get("@#{column_name}")
+      { column_name.to_sym => value }
     end
 
     def prepare_update(item)
-      key = column_name
-      value = item.instance_variable_get("@#{key}")
-      { key.to_sym => value }
+      value = item.instance_variable_get("@#{column_name}")
+      { column_name.to_sym => value }
     end
 
     def primary_key?
-      @attributes[:primary_key]
+      false
     end
 
-    def column_name
-      @attributes[:name]
-    end
+    protected
 
-    def default
-      @attributes[:default]
+    attr_reader :column_name
+  end
+
+  class PrimaryKeyColumn < Column
+    attr_reader :default
+
+    def initialize(name, default)
+      super(name)
+      @default = default
     end
 
     def apply(id, entity)
-      entity.instance_variable_set("@#{column_name}", id ) if primary_key?
+      entity.instance_variable_set("@#{column_name}", id )
     end
 
     def destroy(connection, entity)
-      connection.where(column_name.to_sym => entity.id).delete if primary_key?
+      connection.where(column_name.to_sym => entity.id).delete
+    end
+
+    def primary_key?
+      true
+    end
+
+    def has_default_value?(item)
+      @default == item.id
     end
   end
 end
