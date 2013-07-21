@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["mo@mokhan.ca"]
   spec.description   = %q{a simple ruby orm.}
   spec.summary       = %q{an nhibernate like orm for ruby.}
-  spec.homepage      = ""
+  spec.homepage      = "http://github.com/mokhan/humble"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
