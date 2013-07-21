@@ -43,7 +43,8 @@ module Humble
     end
 
     def insert(item, connection)
-      item.instance_variable_set('@id', connection.insert(prepare_statement { |column| column.prepare_insert(item) }))
+      id = connection.insert(prepare_statement { |column| column.prepare_insert(item) })
+      primary_key_column.apply(id, item)
     end
 
     def update(item, connection)

@@ -28,5 +28,9 @@ module Humble
     def default
       @attributes[:default]
     end
+
+    def apply(id, entity)
+      entity.instance_variable_set("@#{column_name}", id ) if primary_key?
+    end
   end
 end
