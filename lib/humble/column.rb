@@ -32,5 +32,9 @@ module Humble
     def apply(id, entity)
       entity.instance_variable_set("@#{column_name}", id ) if primary_key?
     end
+
+    def destroy(connection, entity)
+      connection.where(column_name.to_sym => entity.id).delete if primary_key?
+    end
   end
 end

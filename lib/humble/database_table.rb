@@ -27,7 +27,7 @@ module Humble
     end
 
     def destroy(connection, entity)
-      connection[@name].where(:id => entity.id).delete
+      primary_key_column.destroy(connection[@name], entity)
     end
 
     private
