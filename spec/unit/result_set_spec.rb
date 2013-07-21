@@ -26,4 +26,14 @@ describe Humble::ResultSet do
       collect.last.should == 2
     end
   end
+
+  describe :include? do
+    it "should return true" do
+      sut.include?(1).should be_true
+    end
+
+    it "should return false" do
+      sut.include?(0).should be_false
+    end
+  end
 end
