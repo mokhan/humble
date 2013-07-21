@@ -23,6 +23,9 @@ module Humble
       mapping_for(entity).delete_using(create_connection, entity)
     end
 
+    def dispose
+    end
+
     private
 
     attr_reader :connection_factory, :mapper_registry
