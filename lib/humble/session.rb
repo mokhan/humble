@@ -24,6 +24,8 @@ module Humble
     end
 
     def dispose
+      @connection.disconnect if @connection
+      @connection = nil
     end
 
     private
