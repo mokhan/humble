@@ -20,7 +20,7 @@ module Humble
 
     def persist(connection, item)
       if @primary_key.has_default_value?(item)
-        insert(item, connection[@name])
+        @primary_key.apply(insert(item, connection[@name]) , item)
       else
         update(item, connection[@name])
       end
@@ -39,12 +39,11 @@ module Humble
     end
 
     def insert(item, connection)
-      id = connection.insert(prepare_statement { |column| column.prepare_insert(item) })
-      @primary_key.apply(id, item)
+      connection.insert(prepare_statement { |column| column.prepare(item) })
     end
 
     def update(item, connection)
-      connection.update( prepare_statement { |column| column.prepare_update(item) })
+      connection.update(prepare_statement { |column| column.prepare(item) })
     end
   end
 end

@@ -4,6 +4,24 @@ module Humble
       @column_name = name
     end
 
+    def prepare(item)
+      if primary_key? && has_default_value?
+        prepare_insert(item)
+      else
+        prepare_update(item)
+      end
+    end
+
+    def primary_key?
+      false
+    end
+
+    protected
+
+    attr_reader :column_name
+
+    private
+
     def prepare_insert(item)
       return {} if primary_key?
       value = item.instance_variable_get("@#{column_name}")
@@ -15,13 +33,6 @@ module Humble
       { column_name.to_sym => value }
     end
 
-    def primary_key?
-      false
-    end
-
-    protected
-
-    attr_reader :column_name
   end
 
   class PrimaryKeyColumn < Column
