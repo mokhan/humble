@@ -13,6 +13,10 @@ module Humble
       @table.persist(connection, entity)
     end
 
+    def delete_using(connection, entity)
+      @table.destroy(connection, entity)
+    end
+
     def matches?(item)
       self[:type] == item || item.is_a?(self[:type])
     end

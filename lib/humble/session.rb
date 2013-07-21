@@ -19,6 +19,10 @@ module Humble
       mapping_for(clazz).find_all_using(create_connection)
     end
 
+    def delete(entity)
+      mapping_for(entity).delete_using(create_connection, entity)
+    end
+
     private
 
     attr_reader :connection_factory, :mapper_registry

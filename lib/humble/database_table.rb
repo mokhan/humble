@@ -26,6 +26,10 @@ module Humble
       end
     end
 
+    def destroy(connection, entity)
+      connection[@name].where(:id => entity.id).delete
+    end
+
     private
 
     def has_default_value?(item)
