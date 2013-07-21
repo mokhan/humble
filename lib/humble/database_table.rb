@@ -20,18 +20,17 @@ module Humble
 
     def persist(connection, item)
       if has_default_value?(item)
-        id = connection[@name].insert(insert(item))
-        item.instance_variable_set('@id', id)
+        insert(item, connection[@name])
       else
         connection[@name].update(update(item))
       end
     end
 
+    private
+
     def has_default_value?(item)
       primary_key_column.default == item.id
     end
-
-    private
 
     def primary_key_column
       @columns.find { |x| x.primary_key? }
@@ -43,10 +42,8 @@ module Humble
       end
     end
 
-    def insert(item)
-      prepare_statement do |column|
-        column.prepare_insert(item)
-      end
+    def insert(item, connection)
+      item.instance_variable_set('@id', connection.insert(prepare_statement { |column| column.prepare_insert(item) }))
     end
 
     def update(item)
