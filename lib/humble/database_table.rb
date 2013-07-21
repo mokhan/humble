@@ -22,7 +22,7 @@ module Humble
       if has_default_value?(item)
         insert(item, connection[@name])
       else
-        connection[@name].update(update(item))
+        update(item, connection[@name])
       end
     end
 
@@ -46,11 +46,8 @@ module Humble
       item.instance_variable_set('@id', connection.insert(prepare_statement { |column| column.prepare_insert(item) }))
     end
 
-    def update(item)
-      prepare_statement do |column|
-        column.prepare_update(item)
-      end
+    def update(item, connection)
+      connection.update( prepare_statement { |column| column.prepare_update(item) })
     end
-
   end
 end
