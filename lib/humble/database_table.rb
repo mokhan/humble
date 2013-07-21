@@ -32,18 +32,18 @@ module Humble
 
     private
 
-    def prepare_statement
+    def prepare_statement_for(item)
       @columns.inject({}) do |result, column|
-        result.merge(yield(column))
+        result.merge(column.prepare(item))
       end
     end
 
-    def insert(item, connection)
-      connection.insert(prepare_statement { |column| column.prepare(item) })
+    def insert(item, dataset)
+      dataset.insert(prepare_statement_for(item))
     end
 
-    def update(item, connection)
-      connection.update(prepare_statement { |column| column.prepare(item) })
+    def update(item, dataset)
+      dataset.update(prepare_statement_for(item))
     end
   end
 end
