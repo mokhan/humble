@@ -62,7 +62,7 @@ To connect to the database you need a session.
 
   session = session_factory.create_session
   session.begin_transaction do |session|
-    session.save(Movie.new(:name => 'Man on Fire')
+    session.save(Movie.new(:name => 'Man on Fire'))
   end
 
   all_movies = session.find_all(Movie)
