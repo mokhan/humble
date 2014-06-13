@@ -37,7 +37,7 @@ describe "select items" do
       expect(result).to be_instance_of(Movie)
       expect(result.id).to eql(movie_id)
       expect(result.name).to eql('blood in, blood out')
-      #expect(result.studio).to be_instance_of(Studio)
+      expect(result.studio).to be_instance_of(Studio)
     end
   end
 end

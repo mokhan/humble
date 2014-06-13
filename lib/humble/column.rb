@@ -52,8 +52,10 @@ module Humble
       @type = type
     end
 
-    def apply(id, entity)
-      #entity.public_send("#{column_name}=", id)
+    def apply(value, entity)
+      child_entity = @type.new
+      column = column_name.to_s.gsub(/_id/, '')
+      entity.public_send("#{column}=", child_entity)
     end
 
     def prepare(entity)
