@@ -8,7 +8,6 @@ module Humble
 
     def prepare(entity)
       return {} if primary_key? && has_default_value?(entity)
-      #{ column_name.to_sym => entity.instance_variable_get("@#{column_name}") }
       { column_name.to_sym => entity.public_send(column_name.to_sym) }
     end
 

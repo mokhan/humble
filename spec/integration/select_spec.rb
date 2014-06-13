@@ -29,15 +29,25 @@ describe "select items" do
   end
 
   context "when fetching a single item" do
-    it "loads the belongs_to association" do
-      studio_id = connection[:studios].insert(name: 'universal')
-      movie_id = connection[:movies].insert(name: 'blood in, blood out', studio_id: studio_id)
+    let!(:studio_id) { connection[:studios].insert(name: 'universal') }
+    let!(:movie_id) { connection[:movies].insert(name: 'blood in, blood out', studio_id: studio_id) }
+    let(:result) { session.find(Movie, movie_id) }
 
-      result = session.find(Movie, movie_id)
+    it "loads the proper type" do
       expect(result).to be_instance_of(Movie)
+    end
+
+    it "loads the primary key" do
       expect(result.id).to eql(movie_id)
+    end
+
+    it "loads each mapped column" do
       expect(result.name).to eql('blood in, blood out')
+    end
+
+    it "loads the belongs_to association" do
       expect(result.studio).to be_instance_of(Studio)
+      expect(result.studio.name).to eql('universal')
     end
   end
 end

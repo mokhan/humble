@@ -43,7 +43,6 @@ module Humble
     def map_from(row)
       entity = type.new
       row.each do |key, value|
-        #entity.send("#{key}=", value) unless key == :studio_id
         column_for(key).apply(value, entity)
       end
       entity

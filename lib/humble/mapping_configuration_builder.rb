@@ -1,22 +1,18 @@
 module Humble
   class MappingConfigurationBuilder
-    def initialize(attributes = {}, table = DatabaseTable.new)
-      @attributes = attributes
+    def initialize(table = DatabaseTable.new)
       @table = table
     end
 
     def table(name)
-      @attributes[:table] = name
       @table.named(name)
     end
 
     def type(name)
-      @attributes[:type] = name
       @table.type=name
     end
 
     def primary_key(name, default: 0)
-      @attributes[:primary_key] = name
       @table.primary_key(name, default: default)
     end
 
@@ -29,7 +25,7 @@ module Humble
     end
 
     def build
-      MappingConfiguration.new(@attributes, @table)
+      MappingConfiguration.new(@table)
     end
   end
 end

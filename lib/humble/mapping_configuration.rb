@@ -1,7 +1,6 @@
 module Humble
   class MappingConfiguration
-    def initialize(attributes, table)
-      @attributes = attributes
+    def initialize(table)
       @table = table
     end
 
@@ -18,11 +17,11 @@ module Humble
     end
 
     def matches?(item)
-      self[:type] == item || item.is_a?(self[:type])
+      type == item || item.is_a?(type)
     end
 
-    def [](key)
-      @attributes[key]
+    def type
+      @table.type
     end
   end
 end
