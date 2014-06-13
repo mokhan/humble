@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Humble::ResultSet do
   let(:sut) { Humble::ResultSet.new(rows, mapper) }
-  let(:mapper) { fake }
+  let(:mapper) { double }
   let(:rows) { [{:id => 1}, {id: 2}] }
 
   before :each do
@@ -29,11 +29,11 @@ describe Humble::ResultSet do
 
   describe :include? do
     it "should return true" do
-      sut.include?(1).should be_true
+      sut.include?(1).should be_truthy
     end
 
     it "should return false" do
-      sut.include?(0).should be_false
+      sut.include?(0).should be_falsey
     end
   end
 end
