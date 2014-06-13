@@ -17,11 +17,7 @@ module Humble
     end
 
     def matches?(item)
-      type == item || item.is_a?(type)
-    end
-
-    def type
-      @table.type
+      @table.type == item || item.is_a?(@table.type)
     end
   end
 end
