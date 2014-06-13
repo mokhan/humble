@@ -1,4 +1,5 @@
 require "spec_helper"
+require 'sequel'
 require_relative 'integration/fixtures/movie_mapping.rb'
 
 shared_context "orm" do
@@ -20,5 +21,4 @@ shared_context "orm" do
   after :each do
     connection.drop_table :movies
   end
-
 end
