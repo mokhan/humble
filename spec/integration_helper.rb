@@ -1,5 +1,6 @@
 require "spec_helper"
 require 'sequel'
+require_relative 'integration/fixtures/studio_mapping.rb'
 require_relative 'integration/fixtures/movie_mapping.rb'
 
 shared_context "orm" do
@@ -10,15 +11,23 @@ shared_context "orm" do
   let(:session) { session_factory.create_session }
 
   before :each do
-    connection.create_table :movies do
+    connection.create_table :studios do
       primary_key :id
       String :name
     end
 
+    connection.create_table :movies do
+      primary_key :id
+      BigNum :studio_id
+      String :name
+    end
+
     configuration.add(MovieMapping.new)
+    configuration.add(StudioMapping.new)
   end
 
   after :each do
+    connection.drop_table :studios
     connection.drop_table :movies
   end
 end

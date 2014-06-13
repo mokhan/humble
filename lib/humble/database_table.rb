@@ -1,6 +1,7 @@
 module Humble
   class DatabaseTable
     attr_reader :name
+    attr_accessor :type
 
     def initialize
       @columns = []
@@ -12,10 +13,19 @@ module Humble
 
     def primary_key(name, default: 0)
       @primary_key = PrimaryKeyColumn.new(name, default)
+      add(@primary_key)
+    end
+
+    def add(column)
+      @columns.push(column)
     end
 
     def add_column(name)
-      @columns << Column.new(name)
+      add(Column.new(name))
+    end
+
+    def find_all_using(connection)
+      ResultSet.new(connection[self.name], self)
     end
 
     def persist(connection, item)
@@ -30,7 +40,20 @@ module Humble
       @primary_key.destroy(connection[@name], entity)
     end
 
+    def map_from(row)
+      entity = type.new
+      row.each do |key, value|
+        #entity.send("#{key}=", value) unless key == :studio_id
+        column_for(key).apply(value, entity)
+      end
+      entity
+    end
+
     private
+
+    def column_for(key)
+      @columns.find { |x| x.matches?(key) }
+    end
 
     def prepare_statement_for(item)
       @columns.inject({}) do |result, column|

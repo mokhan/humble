@@ -12,6 +12,7 @@ module Humble
 
     def type(name)
       @attributes[:type] = name
+      @table.type=name
     end
 
     def primary_key(name, default: 0)
@@ -21,6 +22,10 @@ module Humble
 
     def column(name)
       @table.add_column(name)
+    end
+
+    def belongs_to(foreign_key, type)
+      @table.add(BelongsTo.new(foreign_key, type))
     end
 
     def build

@@ -1,21 +1,28 @@
 module Humble
   class Column
+    attr_reader :column_name
+
     def initialize(name)
       @column_name = name
     end
 
-    def prepare(item)
-      return {} if primary_key? && has_default_value?
-      { column_name.to_sym => item.instance_variable_get("@#{column_name}") }
+    def prepare(entity)
+      return {} if primary_key? && has_default_value?(entity)
+      #{ column_name.to_sym => entity.instance_variable_get("@#{column_name}") }
+      { column_name.to_sym => entity.public_send(column_name.to_sym) }
+    end
+
+    def matches?(column_name)
+      @column_name == column_name
+    end
+
+    def apply(value, entity)
+      entity.public_send("#{@column_name}=", value)
     end
 
     def primary_key?
       false
     end
-
-    protected
-
-    attr_reader :column_name
   end
 
   class PrimaryKeyColumn < Column
@@ -26,10 +33,6 @@ module Humble
       @default = default
     end
 
-    def apply(id, entity)
-      entity.instance_variable_set("@#{column_name}", id )
-    end
-
     def destroy(connection, entity)
       connection.where(column_name.to_sym => entity.id).delete
     end
@@ -38,8 +41,23 @@ module Humble
       true
     end
 
-    def has_default_value?(item)
-      @default == item.id
+    def has_default_value?(entity)
+      entity.id == nil || @default == entity.id
+    end
+  end
+
+  class BelongsTo < Column
+    def initialize(name, type)
+      super(name)
+      @type = type
+    end
+
+    def apply(id, entity)
+      #entity.public_send("#{column_name}=", id)
+    end
+
+    def prepare(entity)
+      { column_name.to_sym => '' }
     end
   end
 end

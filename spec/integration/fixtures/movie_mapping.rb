@@ -1,14 +1,5 @@
 class Movie
-  attr_reader :id, :name
-
-  def initialize(attributes)
-    @id = attributes[:id] || -1
-    @name = attributes[:name]
-  end
-
-  def name=(new_name)
-    @name = new_name
-  end
+  attr_accessor :id, :name, :studio
 
   def ==(other)
     return false unless other
@@ -24,5 +15,6 @@ class MovieMapping < Humble::DatabaseMapping
     map.type Movie
     map.primary_key(:id, default: -1)
     map.column :name
+    map.belongs_to :studio_id, Studio
   end
 end

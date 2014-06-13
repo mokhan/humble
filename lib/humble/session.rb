@@ -15,6 +15,10 @@ module Humble
       mapping_for(entity).save_using(create_connection, entity)
     end
 
+    def find(clazz, id)
+      find_all(clazz).find { |x| x.id == id }
+    end
+
     def find_all(clazz)
       mapping_for(clazz).find_all_using(create_connection)
     end

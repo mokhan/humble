@@ -4,7 +4,7 @@ describe "orm" do
   include_context "orm"
 
   context "when inserting a new record" do
-    let(:movie) { Movie.new(:name => 'oop') }
+    let(:movie) { Movie.new.tap { |x| x.name = 'oop' } }
 
     before :each do
       session.begin_transaction do |session|
@@ -15,20 +15,20 @@ describe "orm" do
     let(:results) { connection[:movies].all }
 
     it "should insert the correct number of records" do
-      results.count.should == 1
+      expect(results.count).to eql(1)
     end
 
     it "should insert the record with the a new id" do
-      results.first[:id].should_not == -1
-      results.first[:id].should > 0
+      expect(results.first[:id]).to_not eql(-1)
+      expect(results.first[:id]).to be > 0
     end
 
     it "should insert the name" do
-      results.first[:name].should == 'oop'
+      expect(results.first[:name]).to eql('oop')
     end
 
     it "should update the new item with the new id" do
-      movie.id.should_not == -1
+      expect(movie.id).to_not eql(-1)
     end
   end
 end

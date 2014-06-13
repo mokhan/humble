@@ -5,7 +5,11 @@ module Humble
     end
 
     def map_from(row)
-      @configuration[:type].new(row)
+      result = @configuration.type.new
+      row.each do |key, value|
+        result.send("#{key}=", value)
+      end
+      result
     end
   end
 end

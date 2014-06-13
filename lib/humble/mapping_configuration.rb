@@ -6,7 +6,7 @@ module Humble
     end
 
     def find_all_using(connection)
-      ResultSet.new(connection[@table.name], mapper)
+      @table.find_all_using(connection)
     end
 
     def save_using(connection, entity)
@@ -23,12 +23,6 @@ module Humble
 
     def [](key)
       @attributes[key]
-    end
-
-    private
-
-    def mapper
-      self[:mapper] || DefaultDataRowMapper.new(self)
     end
   end
 end
