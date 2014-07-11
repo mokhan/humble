@@ -5,7 +5,13 @@ module Humble
     end
 
     def create_session
-      Session.new(self, @configuration)
+      Session.new(self, @configuration).tap do |session|
+        begin
+          yield session if block_given?
+        ensure
+          session.dispose if block_given?
+        end
+      end
     end
 
     def create_connection
