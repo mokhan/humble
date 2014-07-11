@@ -6,7 +6,7 @@ module Humble
     end
 
     def find_all_using(session)
-      ResultSet.new(session.create_connection[@table.name], DefaultMapper.new(@table, session))
+      ResultSet.new(session.create_connection[@table.name], mapper_for(session))
     end
 
     def save_using(session, entity)
@@ -28,6 +28,10 @@ module Humble
     end
 
     private
+
+    def mapper_for(session)
+      DefaultMapper.new(@table, session)
+    end
 
     def primary_key
       @primary_key ||= @table.find do |column|
