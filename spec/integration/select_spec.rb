@@ -49,5 +49,8 @@ describe "select items" do
       expect(result.studio).to be_instance_of(Studio)
       expect(result.studio.name).to eql('universal')
     end
+
+    xit "loads the has_many association" do
+    end
   end
 end
