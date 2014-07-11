@@ -14,7 +14,7 @@ module Humble
     end
 
     def save(entity)
-      mapping_for(entity).save_using(create_connection, entity)
+      mapping_for(entity).save_using(self, entity)
     end
 
     def find(clazz, id)

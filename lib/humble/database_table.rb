@@ -1,5 +1,7 @@
 module Humble
   class DatabaseTable
+    include Enumerable
+
     attr_reader :name
     attr_accessor :type
 
@@ -24,11 +26,9 @@ module Humble
       add(Column.new(name))
     end
 
-    def persist(connection, item)
-      if @primary_key.has_default_value?(item)
-        @primary_key.apply(insert(item, connection[@name]) , item, nil)
-      else
-        update(item, connection[@name])
+    def each
+      @columns.each do |column|
+        yield column
       end
     end
 
@@ -40,20 +40,10 @@ module Humble
       @columns.find { |x| x.matches?(key) }
     end
 
-    private
-
     def prepare_statement_for(item)
       @columns.inject({}) do |result, column|
         result.merge(column.prepare(item))
       end
-    end
-
-    def insert(item, dataset)
-      dataset.insert(prepare_statement_for(item))
-    end
-
-    def update(item, dataset)
-      dataset.update(prepare_statement_for(item))
     end
   end
 end
