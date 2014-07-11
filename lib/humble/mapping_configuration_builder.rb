@@ -1,9 +1,5 @@
 module Humble
   class MappingConfigurationBuilder
-    def initialize(table = DatabaseTable.new)
-      @table = table
-    end
-
     def table(name)
       @table.named(name)
     end
@@ -24,8 +20,10 @@ module Humble
       @table.add(BelongsTo.new(foreign_key, type))
     end
 
-    def build
-      MappingConfiguration.new(@table)
+    def build(mapping)
+      @table = DatabaseTable.new
+      mapping.run(self)
+      @table
     end
   end
 end

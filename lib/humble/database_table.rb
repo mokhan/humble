@@ -24,13 +24,9 @@ module Humble
       add(Column.new(name))
     end
 
-    def find_all_using(connection)
-      ResultSet.new(connection[self.name], self)
-    end
-
     def persist(connection, item)
       if @primary_key.has_default_value?(item)
-        @primary_key.apply(insert(item, connection[@name]) , item)
+        @primary_key.apply(insert(item, connection[@name]) , item, nil)
       else
         update(item, connection[@name])
       end
@@ -40,19 +36,11 @@ module Humble
       @primary_key.destroy(connection[@name], entity)
     end
 
-    def map_from(row)
-      entity = type.new
-      row.each do |key, value|
-        column_for(key).apply(value, entity)
-      end
-      entity
-    end
-
-    private
-
     def column_for(key)
       @columns.find { |x| x.matches?(key) }
     end
+
+    private
 
     def prepare_statement_for(item)
       @columns.inject({}) do |result, column|

@@ -1,8 +1,10 @@
+require 'debugger'
+
 module Humble
   class Session
-    def initialize(connection_factory, mapper_registry)
-      @connection_factory = connection_factory
-      @mapper_registry = mapper_registry
+    def initialize(session_factory, configuration)
+      @session_factory = session_factory
+      @configuration = configuration
     end
 
     def begin_transaction(&block)
@@ -20,7 +22,7 @@ module Humble
     end
 
     def find_all(clazz)
-      mapping_for(clazz).find_all_using(create_connection)
+      mapping_for(clazz).find_all_using(self)
     end
 
     def delete(entity)
@@ -32,16 +34,14 @@ module Humble
       @connection = nil
     end
 
-    private
-
-    attr_reader :connection_factory, :mapper_registry
-
     def create_connection
-      @connection ||= connection_factory.create_connection
+      @connection ||= @session_factory.create_connection
     end
 
+    private
+
     def mapping_for(entity)
-      mapper_registry.mapping_for(entity)
+      @configuration.mapping_for(entity)
     end
   end
 end

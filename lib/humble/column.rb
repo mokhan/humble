@@ -15,7 +15,7 @@ module Humble
       @column_name == column_name
     end
 
-    def apply(value, entity)
+    def apply(value, entity, session)
       entity.public_send("#{@column_name}=", value)
     end
 
@@ -51,14 +51,18 @@ module Humble
       @type = type
     end
 
-    def apply(value, entity)
-      child_entity = @type.new
-      column = column_name.to_s.gsub(/_id/, '')
-      entity.public_send("#{column}=", child_entity)
+    def apply(value, entity, session)
+      entity.public_send("#{attribute_name}=", session.find(@type, value))
     end
 
     def prepare(entity)
       { column_name.to_sym => '' }
+    end
+
+    private
+
+    def attribute_name
+      column_name.to_s.gsub(/_id/, '')
     end
   end
 end
