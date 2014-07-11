@@ -1,5 +1,3 @@
-require 'debugger'
-
 module Humble
   class Session
     def initialize(session_factory, configuration)
