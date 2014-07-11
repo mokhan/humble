@@ -5,13 +5,13 @@ module Humble
       @configuration = configuration
     end
 
-    def find_all_using(session, connection = session.create_connection)
-      ResultSet.new(connection[@table.name], DefaultMapper.new(@table, session))
+    def find_all_using(session)
+      ResultSet.new(session.create_connection[@table.name], DefaultMapper.new(@table, session))
     end
 
     def save_using(session, entity)
       if primary_key.has_default_value?(entity)
-        primary_key.apply(insert(entity, session.create_connection[@table.name]) , entity, nil)
+        primary_key.apply(insert(entity, session.create_connection[@table.name]), entity, session)
       else
         update(entity, session.create_connection[@table.name])
       end
