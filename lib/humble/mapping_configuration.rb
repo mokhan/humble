@@ -10,10 +10,12 @@ module Humble
     end
 
     def save_using(session, entity)
+      connection = session.create_connection[@table.name]
       if primary_key.has_default_value?(entity)
-        primary_key.apply(insert(entity, session.create_connection[@table.name]), entity, session)
+        result = connection.insert(@table.prepare_statement_for(entity))
+        primary_key.apply(result, entity, session)
       else
-        update(entity, session.create_connection[@table.name])
+        connection.update(@table.prepare_statement_for(entity))
       end
     end
 
@@ -31,14 +33,6 @@ module Humble
       @primary_key ||= @table.find do |column|
         column.primary_key?
       end
-    end
-
-    def insert(item, dataset)
-      dataset.insert(@table.prepare_statement_for(item))
-    end
-
-    def update(item, dataset)
-      dataset.update(@table.prepare_statement_for(item))
     end
 
     class DefaultMapper
