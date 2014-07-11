@@ -32,10 +32,6 @@ module Humble
       end
     end
 
-    def destroy(connection, entity)
-      @primary_key.destroy(connection[@name], entity)
-    end
-
     def column_for(key)
       @columns.find { |x| x.matches?(key) }
     end

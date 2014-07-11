@@ -17,8 +17,8 @@ module Humble
       end
     end
 
-    def delete_using(connection, entity)
-      @table.destroy(connection, entity)
+    def delete_using(session, entity)
+      primary_key.destroy(session.create_connection[@table.name], entity)
     end
 
     def matches?(item)

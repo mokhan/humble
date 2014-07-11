@@ -26,7 +26,7 @@ module Humble
     end
 
     def delete(entity)
-      mapping_for(entity).delete_using(create_connection, entity)
+      mapping_for(entity).delete_using(self, entity)
     end
 
     def dispose
