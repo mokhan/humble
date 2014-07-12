@@ -15,7 +15,8 @@ module Humble
       @column_name == column_name
     end
 
-    def apply(value, entity, session)
+    def apply(row, entity, session)
+      value = row[column_name]
       entity.public_send("#{@column_name}=", value)
     end
 
@@ -51,7 +52,8 @@ module Humble
       @type = type
     end
 
-    def apply(value, entity, session)
+    def apply(row, entity, session)
+      value = row[column_name]
       entity.public_send("#{attribute_name}=", session.find(@type, value))
     end
 
@@ -63,6 +65,22 @@ module Humble
 
     def attribute_name
       column_name.to_s.gsub(/_id/, '')
+    end
+  end
+
+  class HasMany < Column
+    def initialize(attribute, type)
+      super(attribute)
+      @attribute, @type = attribute, type
+    end
+
+    def apply(row, entity, session)
+      items = session.find_all(@type)
+      entity.public_send("#{@attribute}=", items)
+    end
+
+    def prepare(entity)
+      { }
     end
   end
 end

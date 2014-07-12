@@ -1,5 +1,5 @@
 class Movie
-  attr_accessor :id, :name, :studio
+  attr_accessor :id, :name, :studio, :reviews
 
   def ==(other)
     return false unless other
@@ -16,5 +16,6 @@ class MovieMapping < Humble::DatabaseMapping
     map.primary_key(:id, default: -1)
     map.column :name
     map.belongs_to :studio_id, Studio
+    map.has_many :reviews, Review
   end
 end

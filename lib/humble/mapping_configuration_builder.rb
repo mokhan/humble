@@ -20,6 +20,10 @@ module Humble
       @table.add(BelongsTo.new(foreign_key, type))
     end
 
+    def has_many(attribute_name, type)
+      @table.add(HasMany.new(attribute_name, type))
+    end
+
     def build(mapping)
       @table = DatabaseTable.new
       mapping.run(self)

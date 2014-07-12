@@ -32,10 +32,6 @@ module Humble
       end
     end
 
-    def column_for(key)
-      @columns.find { |x| x.matches?(key) }
-    end
-
     def prepare_statement_for(item)
       @columns.inject({}) do |result, column|
         result.merge(column.prepare(item))

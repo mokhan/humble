@@ -12,8 +12,8 @@ module Humble
     def save_using(session, entity)
       connection = session.create_connection[@table.name]
       if primary_key.has_default_value?(entity)
-        result = connection.insert(@table.prepare_statement_for(entity))
-        primary_key.apply(result, entity, session)
+        connection.insert(@table.prepare_statement_for(entity))
+        primary_key.apply(connection, entity, session)
       else
         connection.update(@table.prepare_statement_for(entity))
       end
@@ -40,17 +40,19 @@ module Humble
     end
 
     class DefaultMapper
+      attr_reader :session, :table
+
       def initialize(table, session)
         @table = table
         @session = session
       end
 
       def map_from(row)
-        @table.type.new.tap do |entity|
-          row.each do |key, value|
-            @table.column_for(key).apply(value, entity, @session)
-          end
+        entity = table.type.new
+        table.each do |column|
+          column.apply(row, entity, session)
         end
+        entity
       end
     end
   end

@@ -5,7 +5,7 @@ describe "select items" do
 
   context "when fetching all items" do
     before :each do
-      @id = connection[:movies].insert(:name => 'monsters inc')
+      @id = connection[:movies].insert(name: 'monsters inc')
     end
 
     let(:results) { session.find_all Movie }
@@ -32,6 +32,11 @@ describe "select items" do
     let!(:studio_id) { connection[:studios].insert(name: 'universal') }
     let!(:movie_id) { connection[:movies].insert(name: 'blood in, blood out', studio_id: studio_id) }
     let(:result) { session.find(Movie, movie_id) }
+    let(:description) { 'wow... that snail is fast.' }
+
+    before :each do
+      connection[:reviews].insert(movie_id: movie_id, description: description)
+    end
 
     it "loads the proper type" do
       expect(result).to be_instance_of(Movie)
@@ -50,7 +55,10 @@ describe "select items" do
       expect(result.studio.name).to eql('universal')
     end
 
-    xit "loads the has_many association" do
+    it "loads a has_many association" do
+      expect(result.reviews).to_not be_nil
+      expect(result.reviews.first.description).to eql(description)
+      expect(result.reviews.first.description).to eql(description)
     end
   end
 end

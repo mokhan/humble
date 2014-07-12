@@ -16,7 +16,9 @@ module Humble
     end
 
     def find(clazz, id)
-      find_all(clazz).find { |x| x.id == id }
+      find_all(clazz).find do |x|
+        x.id == id
+      end
     end
 
     def find_all(clazz)
