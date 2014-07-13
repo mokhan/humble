@@ -28,7 +28,7 @@ module Humble
     def items
       @items ||= @rows.map do |row|
         @mapper.map_from(row)
-      end.to_a
+      end
     end
   end
 end
