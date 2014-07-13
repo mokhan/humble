@@ -8,19 +8,27 @@ module Humble
     end
 
     def each(&block)
-      @rows.each do |row|
-        block.call(@mapper.map_from(row))
+      items.each do |item|
+        block.call(item)
       end
     end
 
     def include?(item)
-      self.find do |x|
+      find do |x|
         x == item
       end
     end
 
     def inspect
-      "[#{self.map { |x| x.inspect }.join(", ")}]"
+      "[#{map { |x| x.inspect }.join(", ")}]"
+    end
+
+    private
+
+    def items
+      @items ||= @rows.map do |row|
+        @mapper.map_from(row)
+      end.to_a
     end
   end
 end

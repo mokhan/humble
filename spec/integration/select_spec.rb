@@ -31,12 +31,10 @@ describe "select items" do
   context "when fetching a single item" do
     let!(:studio_id) { connection[:studios].insert(name: 'universal') }
     let!(:movie_id) { connection[:movies].insert(name: 'blood in, blood out', studio_id: studio_id) }
+    let!(:review_id) { connection[:reviews].insert(movie_id: movie_id, description: description) }
+    let!(:other_review_id) { connection[:reviews].insert(movie_id: movie_id + 1, description: 'blah blah') }
     let(:result) { session.find(Movie, movie_id) }
     let(:description) { 'wow... that snail is fast.' }
-
-    before :each do
-      connection[:reviews].insert(movie_id: movie_id, description: description)
-    end
 
     it "loads the proper type" do
       expect(result).to be_instance_of(Movie)
@@ -59,6 +57,10 @@ describe "select items" do
       expect(result.reviews).to_not be_nil
       expect(result.reviews.first.description).to eql(description)
       expect(result.reviews.first.description).to eql(description)
+    end
+
+    it "does not load items associated with another parent record" do
+      expect(result.reviews.find { |x| x.id == other_review_id }).to be_nil
     end
   end
 end

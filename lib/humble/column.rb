@@ -75,7 +75,8 @@ module Humble
     end
 
     def apply(row, entity, session)
-      items = session.find_all(@type)
+      puts "#{@attribute} #{@type} #{row} #{entity}"
+      items = session.find_all(@type).to_a
       entity.public_send("#{@attribute}=", items)
     end
 

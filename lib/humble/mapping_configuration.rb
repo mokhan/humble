@@ -1,12 +1,10 @@
 module Humble
   class MappingConfiguration
+    attr_reader :table
+
     def initialize(table, configuration)
       @table = table
       @configuration = configuration
-    end
-
-    def find_all_using(session)
-      ResultSet.new(session.create_connection[@table.name], mapper_for(session))
     end
 
     def save_using(session, entity)
@@ -29,30 +27,9 @@ module Humble
 
     private
 
-    def mapper_for(session)
-      DefaultMapper.new(@table, session)
-    end
-
     def primary_key
       @primary_key ||= @table.find do |column|
         column.primary_key?
-      end
-    end
-
-    class DefaultMapper
-      attr_reader :session, :table
-
-      def initialize(table, session)
-        @table = table
-        @session = session
-      end
-
-      def map_from(row)
-        entity = table.type.new
-        table.each do |column|
-          column.apply(row, entity, session)
-        end
-        entity
       end
     end
   end

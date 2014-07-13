@@ -3,6 +3,7 @@ module Humble
     def initialize(session_factory, configuration)
       @session_factory = session_factory
       @configuration = configuration
+      @identity_map = IdentityMap.new
     end
 
     def begin_transaction(&block)
@@ -16,13 +17,16 @@ module Humble
     end
 
     def find(clazz, id)
-      find_all(clazz).find do |x|
-        x.id == id
+      @identity_map.fetch("#{clazz.name}-#{id}") do
+        find_all(clazz).find do |x|
+          x.id == id
+        end
       end
     end
 
     def find_all(clazz)
-      mapping_for(clazz).find_all_using(self)
+      table = mapping_for(clazz).table
+      ResultSet.new(create_connection[table.name], DefaultMapper.new(table, self))
     end
 
     def delete(entity)
