@@ -75,13 +75,41 @@ module Humble
     end
 
     def apply(row, entity, session)
-      puts "#{@attribute} #{@type} #{row} #{entity}"
-      items = session.find_all(@type)
-      entity.public_send("#{@attribute}=", items)
+      proxy = ArrayProxy.new(session, @type, @attribute, entity)
+      entity.public_send("#{@attribute}=", proxy)
     end
 
     def prepare(entity)
       { }
+    end
+  end
+
+  class ArrayProxy
+    include Enumerable
+
+    def initialize(session, type, attribute, parent_entity)
+      @session = session
+      @type = type
+      @attribute = attribute
+      @parent = parent_entity
+    end
+
+    def each
+      items.each do |item|
+        yield item
+      end
+    end
+
+    def inspect
+      "[#{map { |x| x.inspect }.join(", ")}]"
+    end
+
+    private
+
+    def items
+      @items ||= @session.find_all(@type).find_all do |item|
+        item.movie && item.movie.id == @parent.id
+      end
     end
   end
 end
